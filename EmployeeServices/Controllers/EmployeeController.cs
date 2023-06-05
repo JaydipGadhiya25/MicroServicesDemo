@@ -30,7 +30,7 @@ namespace EmployeeServices.Controllers
                 using (var connection = _context.CreateConnection())
                 {
 
-                    var employees = await connection.QueryAsync<EmployeeViewModel>("select * from employee");
+                    var employees = await connection.QueryAsync<EmployeeViewModel>("seect * from employee");
 
                     if(employees.Count() == 0)
                     {
@@ -59,7 +59,7 @@ namespace EmployeeServices.Controllers
                 return new JsonResult(new
                 {
 
-                    message = "Error while retriving Employee List",
+                    message = ex.Message,
                     item = "null",
                     code = 500
                 });
