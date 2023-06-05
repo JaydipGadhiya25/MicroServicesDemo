@@ -1,5 +1,6 @@
 ﻿@{
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 }
 @*<div class="container pt-5">
@@ -44,6 +45,11 @@
             
              <th>
                 Joining Date 
+                 
+            </th>
+
+             <th>
+                Action 
                  
             </th>
             
@@ -123,6 +129,10 @@
                         row.append($("<td>").text(employee.city));
                         row.append($("<td>").text(employee.department_Name));
                         row.append($("<td>").text(date));
+                        
+                        row.append($("<td>").html('<a href="editEmployee?id=' + employee.id + '"><i class="btn bi bi-pencil-square"></i></a>' +
+            ' <button type="submit" data-delete-id="' + employee.id + '" class="btn deletebtn"><i class="bi bi-trash"></i></button>'));
+
 
                         // Append the row to the table
                         employeeTable.append(row);

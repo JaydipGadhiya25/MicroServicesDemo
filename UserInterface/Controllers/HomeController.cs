@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Nodes;
 using UserInterface.Models;
 
 namespace UserInterface.Controllers
@@ -45,7 +46,60 @@ namespace UserInterface.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> editEmployeeAsync()
+        {
+            try
+            {
 
+
+                // Set the base URL of your API gateway
+                string apiGatewayBaseUrl = appsetting.Value.GatewayUrl;
+
+                // Construct the API endpoint URL
+                string apiUrl = $"{apiGatewayBaseUrl}/GetOneEmployee";
+
+               
+
+                // Retrieve the token from the user's session
+                string jwtToken = HttpContext.Session.GetString("Token");
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+
+                // Send a POST request to the API gateway
+                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+               
+
+                // Check the response status code
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    dynamic responseData = JsonConvert.DeserializeObject(jsonString);
+
+                    var itemsArray = responseData.item;
+
+                    // Convert the items array into a list of EmployeeViewModel
+                    EmployeeViewModel employees = itemsArray.ToObject<EmployeeViewModel>();
+                    // Deserialize the JSON string into the model
+                    //var jsonData = JsonSerializer.Deserialize<List<EmployeeViewModel>>(jsonString);
+
+                    // Successful API call
+                    return View(employees);
+                }
+                else
+                {
+                    // Handle the error response
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return RedirectToAction("Error", "Home", new { message = errorMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the API call
+                return RedirectToAction("Error", "Home", new { message = ex.Message });
+            }
+        }
         public IActionResult Privacy()
         {
             return View();
