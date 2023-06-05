@@ -1,0 +1,38 @@
+﻿@model EmployeeViewModel
+
+<form class="needs-validation container mt-5" asp-controller="Home" asp-action="CreateNewEmployee" method="post" novalidate>
+  <div class="mb-3">
+    <label for="firstName" class="form-label">First Name</label>
+    @Html.TextBoxFor(m=>m.First_Name,new {placeholder="Enter First name",maxlength=25,@class="form-control",type="text",@id="firstName", required = "required"})
+ <span id="FirstName-error" asp-validation-for="First_Name" class="text-danger"></span>
+</div>
+
+  <div class="mb-3">
+    <label for="lastName" class="form-label">Last Name</label>
+    @Html.TextBoxFor(m=>m.Last_Name,new {placeholder="Enter Last name",maxlength=25,@class="form-control",type="text",@id="lastName", required = "required"})
+ 
+      <span id="LastName-error" asp-validation-for="Last_Name" class="text-danger"></span>
+</div>
+  <div class="mb-3">
+    <label for="employeeId" class="form-label">Employee ID</label>
+    @Html.TextBoxFor(m=>m.Employee_Id,new {placeholder="Enter Employee ID",@class="form-control",type="text",@id="employeeId", required = "required"})
+    <span id="EmployeeId-error" asp-validation-for="Employee_Id" class="text-danger"></span>
+</div>
+  <div class="mb-3">
+    <label for="city" class="form-label">City</label>
+    @Html.TextBoxFor(m=>m.City,new {placeholder="Enter City name",maxlength=25,@class="form-control",type="text",@id="city", required = "required"})
+  <span id="City-error" asp-validation-for="City" class="text-danger"></span>
+</div>
+  <div class="mb-3">
+    <label for="department" class="form-label">Department</label>
+    @Html.TextBoxFor(m=>m.Department_Name,new {placeholder="Enter Department name",maxlength=25,@class="form-control",type="text",@id="department", required = "required"})
+   <span id="DepartmentName-error" asp-validation-for="Department_Name" class="text-danger"></span>
+</div>
+  <div class="mb-3">
+    <label for="joiningDate" class="form-label">Joining Date</label>
+     @Html.TextBoxFor(m=>m.Joining_Date,new {@class="form-control",max=DateTime.UtcNow.ToString("yyyy-MM-dd"),type="date",@id="joiningDate", required = "required"})
+   <span id="JoiningDate-error" asp-validation-for="Joining_Date" class="text-danger"></span>
+ </div>
+ 
+  <button type="submit"  class="btn btn-primary">Submit</button>
+</form>

@@ -2,9 +2,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 }
-<div class="container pt-5">
+@*<div class="container pt-5">
     <button id="employeeListBtn" class="btn-primary btn">Employee List</button>
 </div>
+*@
+
+<div class="container pt-5">
+    <a href="/Home/CreateEmployee" id="employeeListBtn" class="btn-success btn">Create New Employee</a>
+</div>
+
 
 
 <table class="table mt-5 container d-none" id="EmployeeListTable" data-page-length="2">
@@ -73,10 +79,19 @@
 
 
 <script>
+    $.ajax({
+  url: '@Url.Action("SetSession","Home")',
+  method: 'POST',
+  data: { token: localStorage.getItem('token') },
+  success: function(response) {
+    // Session value set successfully
+  },
+  error: function(error) {
+    // Handle any errors
+  }
+});
     $(document).ready(function(){
         
-        $("#employeeListBtn").on('click',function(){
-             
              var token = localStorage.getItem("token");
              
             $.ajax({
@@ -118,7 +133,7 @@
    console.log("error while retriving result")
   }
 });
-        })
+        
     })
     
 

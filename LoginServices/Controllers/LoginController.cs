@@ -45,6 +45,8 @@ namespace LoginServices.Controllers
                         expires: DateTime.UtcNow.AddMinutes(10),
                         signingCredentials: signIn);
 
+                    // Store the token in the user's session
+                    HttpContext.Session.SetString("JwtToken", new JwtSecurityTokenHandler().WriteToken(token));
 
                     if (token == null)
                     {

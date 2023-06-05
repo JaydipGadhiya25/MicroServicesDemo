@@ -26,6 +26,9 @@
 
 
 <script>
+    // Make an AJAX request to the server to set the session value
+
+
     $(document).ready(function(){
         
         $(".submitbtn").on('click',function(){
@@ -46,7 +49,7 @@ var token = response.item;
 // Store the token in localStorage
 localStorage.setItem("token", token);
 
-    window.location.href = "https://localhost:7141/Home/index1";
+    window.location.href = "https://localhost:7141/Home/Dashboard";
   },
   error: function(xhr, status, error) {
     // Handle the error response

@@ -31,7 +31,23 @@
       "AddQueriesToRequest": true,
       "QueryStringKeyAndValues": {},
       "Key": "LoginRoute"
-      
+
+    },
+    {
+      "DownstreamPathTemplate": "/api/Employee/CreateNewEmployee",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7144
+        }
+      ],
+      "UpstreamPathTemplate": "/newEmployee",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ]
 }
