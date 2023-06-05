@@ -1,0 +1,60 @@
+﻿@{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+}
+<div class="container">
+    <form class"d-flex justify-content-center align-items-center">
+  <div class="form-group pt-5">
+    <label for="exampleInputEmail1">User Name</label>
+    <input type="text" class="form-control" id="exampleInput1" aria-describedby="emailHelp" placeholder="Enter User name">
+    
+  </div>
+  <div class="form-group pt-3">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+   <div class="authnticationMSg pt-4 d-none">
+       <span style="color:red;font-size:20px;">Invalid credential !!! Please Enter the correct username and password</span>
+   </div>
+
+ <div class="form-group pt-3">
+    <button type="button" class="btn btn-primary submitbtn">Submit</button>
+  </div>
+  
+</form>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        
+        $(".submitbtn").on('click',function(){
+             var username = $('#exampleInput1').val();
+         var password =  $('#exampleInputPassword1').val();  
+        
+            $.ajax({
+                method: 'POST',
+                url: `https://localhost:7085/login?username=${username}&password=${password}`,
+  
+ 
+  success: function(response) {
+    // Handle the success response
+    // Assuming you have retrieved the token from the server response
+    
+var token = response.item;
+
+// Store the token in localStorage
+localStorage.setItem("token", token);
+
+    window.location.href = "https://localhost:7141/Home/index1";
+  },
+  error: function(xhr, status, error) {
+    // Handle the error response
+   $(".authnticationMSg").removeClass('d-none');
+  }
+});
+        })
+    })
+    
+
+</script>

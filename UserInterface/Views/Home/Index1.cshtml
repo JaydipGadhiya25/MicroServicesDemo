@@ -1,0 +1,125 @@
+﻿@{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+}
+<div class="container pt-5">
+    <button id="employeeListBtn" class="btn-primary btn">Employee List</button>
+</div>
+
+
+<table class="table mt-5 container d-none" id="EmployeeListTable" data-page-length="2">
+    <thead>
+        <tr>
+            
+            <th>
+                First Name
+                 
+            </th>
+           
+            <th>
+                Last Name
+               
+            </th>
+            
+            <th>
+                Employee ID
+                
+            </th>
+             
+             <th>
+                City 
+                 
+            </th>
+            
+             <th>
+                Department
+                 
+            </th>
+            
+             <th>
+                Joining Date 
+                 
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody class="mainBody employeeListTableBody">
+
+        <tr>
+            <td>
+                First_Name
+            </td>
+            <td>
+                Last_Name
+            </td>
+            <td>
+                Employee_Id
+            </td>
+            <td>
+                City
+            </td>
+            <td>
+                Department_Name
+            </td>
+            <td>
+                Joining_Date?.ToString("yyyy-MM-dd")
+            </td>
+           
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).ready(function(){
+        
+        $("#employeeListBtn").on('click',function(){
+             
+             var token = localStorage.getItem("token");
+             
+            $.ajax({
+  url: `https://localhost:7085/employee`,
+  method: 'GET',
+   headers: {
+        'Authorization': 'Bearer ' + token // Include the JWT token in the authorization header
+      },
+ 
+  success: function(response) {
+    // Handle the success response
+    $("#EmployeeListTable").removeClass('d-none');
+     var employeeTable = $(".employeeListTableBody");
+     
+                    // Clear existing rows
+                    employeeTable.empty();
+
+                    // Iterate over the data array
+                    $.each(response.item, function (index, employee) {
+                        // Create a new row
+                        var row = $("<tr>");
+
+                        // Populate the row with employee data
+                        var date = new Date(employee.joining_Date).toLocaleDateString();
+                        
+                        row.append($("<td>").text(employee.first_Name));
+                        row.append($("<td>").text(employee.last_Name));
+                        row.append($("<td>").text(employee.employee_Id));
+                        row.append($("<td>").text(employee.city));
+                        row.append($("<td>").text(employee.department_Name));
+                        row.append($("<td>").text(date));
+
+                        // Append the row to the table
+                        employeeTable.append(row);
+                    });
+  },
+  error: function(xhr, status, error) {
+    // Handle the error response
+   console.log("error while retriving result")
+  }
+});
+        })
+    })
+    
+
+</script>

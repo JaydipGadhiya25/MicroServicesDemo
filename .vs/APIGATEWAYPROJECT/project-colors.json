@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "501c915a-0ff5-4bd2-8b24-9469af62acf4": {
+      "ProjectGuid": "501c915a-0ff5-4bd2-8b24-9469af62acf4",
+      "DisplayName": "APIGATEWAY",
+      "ColorIndex": 0
+    },
+    "01e0bc57-390c-4f50-ba7b-529ab8429e48": {
+      "ProjectGuid": "01e0bc57-390c-4f50-ba7b-529ab8429e48",
+      "DisplayName": "LoginServices",
+      "ColorIndex": 1
+    },
+    "02cfb29a-7612-4b65-a305-c25917268535": {
+      "ProjectGuid": "02cfb29a-7612-4b65-a305-c25917268535",
+      "DisplayName": "EmployeeServices",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}
