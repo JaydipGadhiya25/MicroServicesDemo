@@ -17,13 +17,15 @@ namespace UserInterface.Controllers
         private readonly HttpClient _httpClient;
         private readonly IOptions<MyAppSetting> appsetting;
         private readonly RequestSender _apiGatewayService;
+        private readonly ErrorHandler _errorHandler;
 
-        public HomeController(ILogger<HomeController> logger,RequestSender apiGatewayService, HttpClient httpClient,IOptions<MyAppSetting> app)
+        public HomeController(ILogger<HomeController> logger, ErrorHandler errorHandler,RequestSender apiGatewayService, HttpClient httpClient,IOptions<MyAppSetting> app)
         {
             _logger = logger;
             _httpClient = httpClient;
             appsetting = app;
             _apiGatewayService = apiGatewayService;
+            _errorHandler = errorHandler;
         }
 
         [HttpPost]
@@ -70,18 +72,24 @@ namespace UserInterface.Controllers
                 string jwtToken = Request.Headers["RequestVerificationToken"];
                 // Send a POST request to the API gateway using the service
                 HttpResponseMessage response = await _apiGatewayService.SendPostRequest("newEmployee", empData, jwtToken);
+                var error = new ErrorDetails
+                {
+                    Message = "successfull",
+                    Item = "dsds",
+                    StatusCode = (int)response.StatusCode,
+                };
 
-               
                 if (response.IsSuccessStatusCode)
                 {
                     // Successful API call
+                    _errorHandler.HandleError(error);
                     return RedirectToAction("Dashboard", "Home");
                 }
                 else
                 {
                     // Handle the error response
-                    string errorMessage = await response.Content.ReadAsStringAsync();
-                    return RedirectToAction("Error", "Home", new { message = errorMessage });
+                    var result = _errorHandler.HandleError(error);
+                    return RedirectToAction("Error", "Home", new { result });
                 }
             }
             catch (Exception ex)

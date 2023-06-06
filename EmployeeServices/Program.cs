@@ -1,10 +1,12 @@
 using EmployeeServices.Context;
+using EmployeeServices.Controllers.CustomClasses;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ErrorHandler>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
@@ -6,9 +7,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+builder.Services.AddAuthentication()
+                .AddJwtBearer("TestKey",options =>
                 {
+                    
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,

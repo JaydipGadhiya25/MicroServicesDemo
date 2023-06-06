@@ -12,7 +12,7 @@
       "UpstreamPathTemplate": "/employee",
       "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
       }
     },
@@ -46,7 +46,7 @@
       "UpstreamPathTemplate": "/newEmployee",
       "UpstreamHttpMethod": [ "Post" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
       }
     },
@@ -64,7 +64,7 @@
       "AddQueriesToRequest": true,
       "QueryStringKeyAndValues": {},
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
       }
     },
@@ -80,7 +80,7 @@
       "UpstreamPathTemplate": "/EditEmployee",
       "UpstreamHttpMethod": [ "Post" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
       }
     },
@@ -98,7 +98,7 @@
       "AddQueriesToRequest": true,
       "QueryStringKeyAndValues": {},
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKey": "TestKey",
         "AllowedScopes": []
       }
     }
@@ -109,3 +109,42 @@
 
 
 
+//{
+//  "Routes": [
+//    {
+//      "DownstreamPathTemplate": "/api/{*}/{*}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 7060
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/{*}",
+
+//      "UpstreamHttpMethod": [ "Post" ],
+//      "AddQueriesToRequest": true,
+//      "QueryStringKeyAndValues": {}
+      
+
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/{*}/GetEmployees",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 7144
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/{*}",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "TestKey",
+//        "AllowedScopes": []
+//      }
+//    }
+    
+    
+//  ]
+//}

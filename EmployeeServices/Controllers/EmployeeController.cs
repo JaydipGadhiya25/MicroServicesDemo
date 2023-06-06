@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EmployeeServices.Context;
+using EmployeeServices.Controllers.CustomClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -13,12 +14,14 @@ namespace EmployeeServices.Controllers
     {
 
         public readonly DapperContext _context;
+        private readonly ErrorHandler _errorHandler;
 
-        public EmployeeController(DapperContext context)
+        public EmployeeController(DapperContext context, ErrorHandler errorHandler)
         {
             
             _context = context;
-            
+            _errorHandler = errorHandler;
+
         }
         [HttpGet]
         [Route("GetEmployees")]
@@ -35,6 +38,13 @@ namespace EmployeeServices.Controllers
 
                     if(employees.Count() == 0)
                     {
+                        var error1 = new ErrorDetails
+                        {
+                            Message = "Employee List not found",
+                            Item = employees,
+                            StatusCode = 404,
+                        };
+                        _errorHandler.HandleError(error1);
                         return new JsonResult(new
                         {
 
@@ -42,29 +52,36 @@ namespace EmployeeServices.Controllers
                             item = "null",
                             code = 404
                         });
-                    }
-                     return new JsonResult(new
-                        {
 
-                            message = "Succesfully returning Employee List",
-                            item = employees,
-                            code = 201
-                        });
+                    }
+                    var error = new ErrorDetails
+                    {
+                        Message = "Succesfully returning Employee List",
+                        Item = employees,
+                        StatusCode = 201,
+                    };
+                    _errorHandler.HandleError(error);
+                    return new JsonResult(new
+                    {
+
+                        message = "Succesfully returning Employee List",
+                        item = employees,
+                        code = 201
+                    });
 
                 }
             }
             
             catch (Exception ex)
             {
-                // Handle any exceptions that occur during the retrieval of employee list
-                return new JsonResult(new
+                var error = new ErrorDetails
                 {
-
-                    message = ex.Message,
-                    item = "null",
-                    code = 500
-                });
-
+                    Message = ex.Message,
+                    Item = null,
+                    StatusCode = 500,
+                };
+                _errorHandler.HandleError(error);
+               
             }
         }
 
