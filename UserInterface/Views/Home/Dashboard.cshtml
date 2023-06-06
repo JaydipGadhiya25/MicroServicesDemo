@@ -81,6 +81,30 @@
 
     </tbody>
 </table>
+<div class="modal fade" id="DeleteMsgModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hiddenId" value=""/>
+                <h5>Are you sure you want to delete this item?</h5>
+            </div>
+            <div class="modal-footer modalfooterfordelete">
+                <button type="button" class="btn cancelBtn" data-bs-dismiss="modal">Cancel</button>
+                
+                    
+                     <button type="submit"  id="DeleteBtn" class="btn DeleteEmployeeBtn">Delete</button>
+                
+               
+           
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -130,8 +154,8 @@
                         row.append($("<td>").text(employee.department_Name));
                         row.append($("<td>").text(date));
                         
-                        row.append($("<td>").html('<a href="editEmployee?id=' + employee.id + '"><i class="btn bi bi-pencil-square"></i></a>' +
-            ' <button type="submit" data-delete-id="' + employee.id + '" class="btn deletebtn"><i class="bi bi-trash"></i></button>'));
+                        row.append($("<td>").html('<a /*class="btn editBtn-' + employee.id + '"*/ href="editEmployee?id=' + employee.id + '"><i class="btn bi bi-pencil-square"></i></a>' +
+            ' <button type="button" data-delete-id="' + employee.id + '" class="btn deletebtn"><i class="bi bi-trash"></i></button>'));
 
 
                         // Append the row to the table
@@ -145,6 +169,44 @@
 });
         
     })
-    
+    $(document).ready(function(){
+        $(document).delegate('.editBtn-1','click',function(){
+            console.log("click");
+        })
+    })
 
+
+
+    $(document).ready(function () {
+    $(document).delegate('.deletebtn', 'click', function () {
+        var row = $(this).closest("tr");
+        
+        var btnId = $(this).data("delete-id")
+        var token = localStorage.getItem("token");
+        
+        $("#hiddenId").val(btnId)
+        $("#DeleteMsgModal").modal("show")
+        $("#DeleteBtn").on('click', function () {
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7085/DeleteEmployee?id=${btnId}`,
+                 headers: {
+        'Authorization': 'Bearer ' + token // Include the JWT token in the authorization header
+      },
+                data: { id: btnId },
+                success: function (data) {
+                    $("#DeleteMsgModal").modal("hide")
+                    row.remove();
+                    
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: Unable to retrieve search results.");
+                    console.log("Status: " + textStatus);
+                    console.log("Error: " + errorThrown);
+                }
+            })
+        })
+
+    })
+})
 </script>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -23,12 +24,12 @@ namespace UserInterface.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetSession(string token)
+        public IActionResult setsession(string token)
         {
-            // Store the token value in the session
-            HttpContext.Session.SetString("Token", token);
+            // store the token value in the session
+            HttpContext.Session.SetString("token", token);
 
-            // Return a response indicating success
+            // return a response indicating success
             return Ok();
         }
 
@@ -46,66 +47,20 @@ namespace UserInterface.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> editEmployeeAsync()
+       
+        public async Task<IActionResult> editEmployee(int id)
         {
-            try
-            {
-
-
-                // Set the base URL of your API gateway
-                string apiGatewayBaseUrl = appsetting.Value.GatewayUrl;
-
-                // Construct the API endpoint URL
-                string apiUrl = $"{apiGatewayBaseUrl}/GetOneEmployee";
-
+            ViewData["id"] = id;    
+           return View();
                
-
-                // Retrieve the token from the user's session
-                string jwtToken = HttpContext.Session.GetString("Token");
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-
-
-                // Send a POST request to the API gateway
-                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
-               
-
-                // Check the response status code
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonString = await response.Content.ReadAsStringAsync();
-
-                    dynamic responseData = JsonConvert.DeserializeObject(jsonString);
-
-                    var itemsArray = responseData.item;
-
-                    // Convert the items array into a list of EmployeeViewModel
-                    EmployeeViewModel employees = itemsArray.ToObject<EmployeeViewModel>();
-                    // Deserialize the JSON string into the model
-                    //var jsonData = JsonSerializer.Deserialize<List<EmployeeViewModel>>(jsonString);
-
-                    // Successful API call
-                    return View(employees);
-                }
-                else
-                {
-                    // Handle the error response
-                    string errorMessage = await response.Content.ReadAsStringAsync();
-                    return RedirectToAction("Error", "Home", new { message = errorMessage });
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that occur during the API call
-                return RedirectToAction("Error", "Home", new { message = ex.Message });
-            }
         }
         public IActionResult Privacy()
         {
             return View();
         }
 
-        public async Task<IActionResult> CreateNewEmployeeAsync(EmployeeViewModel empData)
+        [HttpPost]
+        public async Task<IActionResult> CreateNewEmployee(EmployeeViewModel empData)
         {
             try
             {
@@ -124,7 +79,7 @@ namespace UserInterface.Controllers
                 StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 // Retrieve the token from the user's session
-                string jwtToken = HttpContext.Session.GetString("Token");
+                string jwtToken = Request.Headers["RequestVerificationToken"]; 
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
 
@@ -151,6 +106,58 @@ namespace UserInterface.Controllers
                 return RedirectToAction("Error", "Home", new { message = ex.Message });
             }
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditEmployeeMethod(EmployeeViewModel empData)
+        {
+            try
+            {
+
+
+                // Set the base URL of your API gateway
+                string apiGatewayBaseUrl = appsetting.Value.GatewayUrl;
+
+                // Construct the API endpoint URL
+                string apiUrl = $"{apiGatewayBaseUrl}/EditEmployee";
+
+                // Serialize the employee data to JSON
+                string jsonData = JsonConvert.SerializeObject(empData);
+
+                // Create a StringContent with the JSON data
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Retrieve the token from the user's session
+                string jwtToken = Request.Headers["RequestVerificationToken"];
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+
+                // Send a POST request to the API gateway
+                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
+
+                // Check the response status code
+                if (response.IsSuccessStatusCode)
+                {
+                    // Successful API call
+                    return RedirectToAction("Dashboard", "Home");
+                }
+                else
+                {
+                    // Handle the error response
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return RedirectToAction("Error", "Home", new { message = errorMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the API call
+                return RedirectToAction("Error", "Home", new { message = ex.Message });
+            }
+        }
+
+
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

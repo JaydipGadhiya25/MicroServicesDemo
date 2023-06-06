@@ -33,6 +33,7 @@
       "Key": "LoginRoute"
 
     },
+
     {
       "DownstreamPathTemplate": "/api/Employee/CreateNewEmployee",
       "DownstreamScheme": "https",
@@ -48,6 +49,63 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Employee/GetOneEmployees?id={id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7144
+        }
+      ],
+      "UpstreamPathTemplate": "/GetOneEmployees",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddQueriesToRequest": true,
+      "QueryStringKeyAndValues": {},
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Employee/EditEmployee",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7144
+        }
+      ],
+      "UpstreamPathTemplate": "/EditEmployee",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Employee/DeleteEmployee?id={id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7144
+        }
+      ],
+      "UpstreamPathTemplate": "/DeleteEmployee",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddQueriesToRequest": true,
+      "QueryStringKeyAndValues": {},
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ]
 }
+
+
+
+
+

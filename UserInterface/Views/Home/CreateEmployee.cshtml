@@ -1,6 +1,6 @@
 ﻿@model EmployeeViewModel
 
-<form class="needs-validation container mt-5" asp-controller="Home" asp-action="CreateNewEmployee" method="post" novalidate>
+<form class="needs-validation container mt-5 "  method="post" novalidate>
   <div class="mb-3">
     <label for="firstName" class="form-label">First Name</label>
     @Html.TextBoxFor(m=>m.First_Name,new {placeholder="Enter First name",maxlength=25,@class="form-control",type="text",@id="firstName", required = "required"})
@@ -34,5 +34,45 @@
    <span id="JoiningDate-error" asp-validation-for="Joining_Date" class="text-danger"></span>
  </div>
  
-  <button type="submit"  class="btn btn-primary">Submit</button>
+  <button type="button"  class="btn btn-primary createEmployeeBtn">Submit</button>
 </form>
+
+
+
+
+<script>
+    $(document).ready(function(){
+        
+        $(".createEmployeeBtn").on('click',function(){
+           
+            var form = document.querySelector('.needs-validation'); // Get the form element
+              var formData = new FormData(form);
+              var token = localStorage.getItem("token"); 
+              
+
+    var serializedData = {};
+    for (var [key, value] of formData) {
+      serializedData[key] = value;
+    }
+        
+            $.ajax({
+                method: 'POST',
+                url:'@Url.Action("CreateNewEmployee","Home")',
+                data: serializedData,
+                headers: {
+        'RequestVerificationToken': token
+      },
+  
+ 
+  success: function(response) {
+    
+    window.location.href = "https://localhost:7141/Home/Dashboard";
+  },
+  error: function(xhr, status, error) {
+    console.log("Error")
+  }
+});
+        })
+    })
+    
+</script>
