@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
+using UserInterface.Controllers.CustomClasses;
 using UserInterface.Models;
 
 namespace UserInterface.Controllers
@@ -15,12 +16,14 @@ namespace UserInterface.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
         private readonly IOptions<MyAppSetting> appsetting;
+        private readonly RequestSender _apiGatewayService;
 
-        public HomeController(ILogger<HomeController> logger, HttpClient httpClient,IOptions<MyAppSetting> app)
+        public HomeController(ILogger<HomeController> logger,RequestSender apiGatewayService, HttpClient httpClient,IOptions<MyAppSetting> app)
         {
             _logger = logger;
             _httpClient = httpClient;
             appsetting = app;
+            _apiGatewayService = apiGatewayService;
         }
 
         [HttpPost]
@@ -64,30 +67,11 @@ namespace UserInterface.Controllers
         {
             try
             {
+                string jwtToken = Request.Headers["RequestVerificationToken"];
+                // Send a POST request to the API gateway using the service
+                HttpResponseMessage response = await _apiGatewayService.SendPostRequest("newEmployee", empData, jwtToken);
+
                
-
-                // Set the base URL of your API gateway
-                string apiGatewayBaseUrl = appsetting.Value.GatewayUrl;
-
-                // Construct the API endpoint URL
-                string apiUrl = $"{apiGatewayBaseUrl}/newEmployee";
-
-                // Serialize the employee data to JSON
-                string jsonData = JsonConvert.SerializeObject(empData);
-
-                // Create a StringContent with the JSON data
-                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-                // Retrieve the token from the user's session
-                string jwtToken = Request.Headers["RequestVerificationToken"]; 
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-
-
-                // Send a POST request to the API gateway
-                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
-
-                // Check the response status code
                 if (response.IsSuccessStatusCode)
                 {
                     // Successful API call
@@ -113,28 +97,10 @@ namespace UserInterface.Controllers
         {
             try
             {
-
-
-                // Set the base URL of your API gateway
-                string apiGatewayBaseUrl = appsetting.Value.GatewayUrl;
-
-                // Construct the API endpoint URL
-                string apiUrl = $"{apiGatewayBaseUrl}/EditEmployee";
-
-                // Serialize the employee data to JSON
-                string jsonData = JsonConvert.SerializeObject(empData);
-
-                // Create a StringContent with the JSON data
-                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-                // Retrieve the token from the user's session
                 string jwtToken = Request.Headers["RequestVerificationToken"];
+                // Send a POST request to the API gateway using the service
+                HttpResponseMessage response = await _apiGatewayService.SendPostRequest("EditEmployee", empData, jwtToken);
 
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-
-
-                // Send a POST request to the API gateway
-                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
 
                 // Check the response status code
                 if (response.IsSuccessStatusCode)

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using UserInterface.Controllers.CustomClasses;
 using UserInterface.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MyAppSetting>(builder.Configuration.GetSection("CuustomValue"));
-
+builder.Services.AddScoped<RequestSender>();
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options => {
