@@ -81,7 +81,13 @@ namespace EmployeeServices.Controllers
                     StatusCode = 500,
                 };
                 _errorHandler.HandleError(error);
-               
+                return new JsonResult(new
+                {
+
+                    message = ex.Message,
+                    item = "null",
+                    code = 500
+                });
             }
         }
 
